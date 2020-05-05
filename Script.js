@@ -162,7 +162,7 @@ window.onload = function () {
 			scoreText.text = "現在：" + point; 				//point変数が変化するので、毎フレームごとにpointの値を読み込んだ文章を表示する
 
 			//ゲームオーバー判定
-			if (zoyamaImg.x >= 400) || (zoyamaImg2.x >= 400) {						//画面端にぞう山画像が行ってしまったら
+			if (zoyamaImg.x >= 400 || zoyamaImg2.x >= 400) {						//画面端にぞう山画像が行ってしまったら
 				game.popScene();					//mainSceneシーンを外す
 				game.pushScene(endScene);				//endSceneシーンを読み込ませる
 
