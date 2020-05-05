@@ -13,7 +13,8 @@ window.onload = function () {
 
 	//ぞう山くん画像
 	//const zoyamaImgUrl = "zoyama.png";						//game.htmlからの相対パス
-	const zoyamaImgUrl = "ryuji.png";						//game.htmlからの相対パス
+	//const zoyamaImgUrl = "ryuji.png";						//game.htmlからの相対パス
+	const zoyamaImgUrl = "Naruto.png";						//game.htmlからの相対パス
 	game.preload([zoyamaImgUrl]);					//データを読み込んでおく
 
 	//リトライボタン
