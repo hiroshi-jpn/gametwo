@@ -13,9 +13,12 @@ window.onload = function () {
 
 	//ぞう山くん画像
 	//const zoyamaImgUrl = "zoyama.png";						//game.htmlからの相対パス
-	//const zoyamaImgUrl = "ryuji.png";						//game.htmlからの相対パス
 	const zoyamaImgUrl = "Naruto.png";						//game.htmlからの相対パス
 	game.preload([zoyamaImgUrl]);					//データを読み込んでおく
+
+	//りゅうじ画像
+	const zoyamaImgUrl2 = "ryuji.png";						//game.htmlからの相対パス
+	game.preload([zoyamaImgUrl2]);					//データを読み込んでおく
 
 	//リトライボタン
 	const retryImgUrl = "retry.png";						//game.htmlからの相対パス
@@ -84,6 +87,34 @@ window.onload = function () {
 
 		};
 
+		//りゅうじボタン
+		const zoyamaImg2 = new Sprite(166, 168);				//画像サイズをここに書く。使う予定の画像サイズはプロパティで見ておくこと
+		zoyamaImg2.moveTo(118, 100);						//ぞう山ボタンの位置
+		zoyamaImg2.image = game.assets[zoyamaImgUrl2];			//読み込む画像の相対パスを指定。　事前にgame.preloadしてないと呼び出せない
+		mainScene.addChild(zoyamaImg2);					//mainSceneにこのぞう山画像を貼り付ける  
+
+		zoyamaImg2.ontouchend = function () {				//ぞう山ボタンをタッチした（タッチして離した）時にこの中の内容を実行する
+			point++;									//Pointを1増やす
+			game.assets[clickSndUrl].clone().play();		//クリックの音を鳴らす。
+
+			//クリックしたのでぞう山画像のｘ位置を戻す
+			this.x = -200;							//this.xって何？と思った方、Zoyamaの関数内でぞう山の座標を動かすときにはthisを使います。
+
+			//ポイントによって状態Stateを変更する
+			if (point < 3) {
+				state = 1;
+			} else if (point < 6) {
+				state = 2;
+			} else if (point < 9) {
+				state = 3;
+			} else if (point < 12) {
+				state = 4;
+			} else {
+				state = 5;
+			}
+
+		};
+
 
 
 		///////////////////////////////////////////////////
@@ -92,6 +123,8 @@ window.onload = function () {
 			if (state == 0) { 							//state=0のとき、初期セット状態(Pointの状態を０にして)
 				zoyamaImg.x = -200;						//ぞう山のｘ座標を指定
 				zoyamaImg.y = 100;						//ぞう山のy座標を指定
+				zoyamaImg2.x = -200;						//ぞう山のｘ座標を指定
+				zoyamaImg2.y = 100;						//ぞう山のy座標を指定
 				point = 0;  							//point初期化
 				state = 1;							//ゲームスタート状態に移行
 			}
@@ -104,25 +137,32 @@ window.onload = function () {
 			if (state == 3) {							//状態３（point６以上から）
 				zoyamaImg.x += 10;
 				zoyamaImg.y = 200 + Math.sin(zoyamaImg.x / 70) * 100; // ｙ座標を振幅100pxのサイン波で移動(Sinは便利なので慣れとくといいよ！)
+
+				zoyamaImg2.x += 10;
+				zoyamaImg2.y = 100 + Math.sin(zoyamaImg.x / 70) * 100; // ｙ座標を振幅100pxのサイン波で移動(Sinは便利なので慣れとくといいよ！)
 			}
 			if (state == 4) {							//状態４（point９以上から）　4は初期セット状態（state=4）と移動状態（state=4.1)の2つに状態をわける		
 				zoyamaImg.y = Math.random() * 400;			//ｙ座標の位置をランダムに決定
+				zoyamaImg2.y = Math.random() * 400;			//ｙ座標の位置をランダムに決定
 				state = 4.1;
 			}
 			if (state == 4.1) {							//状態４．１ 移動状態
 				zoyamaImg.x += 10;						//ただ移動します
+				zoyamaImg2.x += 10;						//ただ移動します
 			}
 			if (state == 5) {							//状態５（point１２以上から）　 ｙ軸が毎フレーム毎に変化する
 				//zoyamaImg.x += 20;						//移動します。
 				zoyamaImg.x += 5;						//移動します。
 				zoyamaImg.y = Math.random() * 400;			//ｙ座標の位置を枚フレーム毎にランダム決定
+				zoyamaImg2.x += 5;						//移動します。
+				zoyamaImg2.y = Math.random() * 400;			//ｙ座標の位置を枚フレーム毎にランダム決定
 			}
 
 			//現在のテキスト表示
 			scoreText.text = "現在：" + point; 				//point変数が変化するので、毎フレームごとにpointの値を読み込んだ文章を表示する
 
 			//ゲームオーバー判定
-			if (zoyamaImg.x >= 400) {						//画面端にぞう山画像が行ってしまったら
+			if (zoyamaImg.x >= 400) or (zoyamaImg2.x >= 400) {						//画面端にぞう山画像が行ってしまったら
 				game.popScene();					//mainSceneシーンを外す
 				game.pushScene(endScene);				//endSceneシーンを読み込ませる
 
